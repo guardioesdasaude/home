@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardiões da Saúde</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F5A623;
+    --gold-dark: #C47F0A;
+    --gold-light: #FAC75A;
+    --blue: #1A5FA8;
+    --blue-light: #378ADD;
+    --blue-dark: #0C3F72;
+    --red: #C0392B;
+    --green: #1A7A3C;
+    --white: #F5F2E8;
+    --dark: #1A1A18;
+    --pixel-border: 3px solid var(--dark);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--dark);
+    color: var(--white);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* PIXEL BACKGROUND PATTERN */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.03) 31px, rgba(255,255,255,0.03) 32px),
+      repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.03) 31px, rgba(255,255,255,0.03) 32px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  section { position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(26,26,24,0.92);
+    border-bottom: 2px solid var(--gold-dark);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold-light); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Pixel sky layers */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, #0a1628 0%, #1a3a5c 40%, #2a5a8c 60%, #1A1A18 100%);
+    z-index: 0;
+  }
+
+  /* Pixel city silhouette */
+  .city-silhouette {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 180px;
+    z-index: 1;
+    background:
+      /* buildings pixel style */
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px, transparent 29px,
+        #0d1f0d 29px, #0d1f0d 32px
+      );
+  }
+
+  .city-silhouette::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 120px;
+    background: var(--dark);
+    clip-path: polygon(
+      0% 100%, 0% 60%, 3% 60%, 3% 30%, 7% 30%, 7% 60%,
+      10% 60%, 10% 20%, 14% 20%, 14% 60%,
+      17% 60%, 17% 40%, 20% 40%, 20% 10%, 23% 10%, 23% 40%,
+      26% 40%, 26% 60%, 30% 60%, 30% 35%, 34% 35%, 34% 60%,
+      37% 60%, 37% 50%, 40% 50%, 40% 15%, 43% 15%, 43% 50%,
+      46% 50%, 46% 60%, 50% 60%, 50% 25%, 53% 25%, 53% 60%,
+      56% 60%, 56% 45%, 60% 45%, 60% 60%,
+      63% 60%, 63% 30%, 67% 30%, 67% 60%,
+      70% 60%, 70% 20%, 73% 20%, 73% 60%,
+      76% 60%, 76% 40%, 80% 40%, 80% 60%,
+      83% 60%, 83% 35%, 87% 35%, 87% 60%,
+      90% 60%, 90% 50%, 93% 50%, 93% 60%,
+      96% 60%, 96% 30%, 100% 30%, 100% 100%
+    );
+  }
+
+  /* green ground strip */
+  .city-silhouette::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 20px;
+    background: #0d2b0d;
+    border-top: 3px solid #1a4d1a;
+  }
+
+  /* Floating pixels deco */
+  .pixel-deco {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    animation: floatPx 4s ease-in-out infinite;
+    z-index: 1;
+    opacity: 0.6;
+  }
+  .pixel-deco:nth-child(2) { width:6px;height:6px;background:var(--blue-light);animation-delay:1s;animation-duration:5s; }
+  .pixel-deco:nth-child(3) { width:10px;height:10px;background:var(--red);animation-delay:2s;animation-duration:3.5s; }
+  .pixel-deco:nth-child(4) { width:6px;height:6px;background:var(--green);animation-delay:0.5s;animation-duration:6s; }
+
+  @keyframes floatPx {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(45deg); }
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  /* Pixel shield logo */
+  .shield-logo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+    animation: heroFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes heroFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .shield-svg { width: 120px; height: 120px; image-rendering: pixelated; }
+
+  .hero-tagline {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+
+  .hero-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(18px, 4vw, 32px);
+    color: var(--gold);
+    line-height: 1.6;
+    text-shadow: 4px 4px 0 var(--gold-dark), 8px 8px 0 rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .hero-title span {
+    display: block;
+    font-size: clamp(14px, 3vw, 22px);
+    color: var(--blue-light);
+    text-shadow: 3px 3px 0 var(--blue-dark), 6px 6px 0 rgba(0,0,0,0.4);
+    margin-top: 6px;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    margin: 24px auto 36px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(245,242,232,0.85);
+    font-weight: 400;
+  }
+
+  /* PIXEL BUTTON */
+  .btn-pixel {
+    display: inline-block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 1px;
+    position: relative;
+    transition: transform 0.1s;
+    image-rendering: pixelated;
+  }
+
+  .btn-pixel:active { transform: translate(4px, 4px); }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--dark);
+    box-shadow: 4px 4px 0 var(--gold-dark), 8px 8px 0 rgba(0,0,0,0.4);
+  }
+  .btn-primary:hover { background: var(--gold-light); box-shadow: 6px 6px 0 var(--gold-dark), 10px 10px 0 rgba(0,0,0,0.4); }
+
+  .btn-secondary {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 4px 4px 0 var(--blue-dark), 8px 8px 0 rgba(0,0,0,0.4);
+    margin-left: 20px;
+  }
+  .btn-secondary:hover { background: var(--blue-light); }
+
+  .hero-btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+
+  /* PIXEL BADGE */
+  .badge-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(245,166,35,0.3);
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .badge-dot {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    flex-shrink: 0;
+    image-rendering: pixelated;
+  }
+
+  /* SECTION COMMON */
+  .section-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+  .section-title span { color: var(--blue-light); }
+
+  /* ABOUT SECTION */
+  .about {
+    padding: 100px 40px;
+    background: #111110;
+    border-top: 3px solid var(--gold-dark);
+    border-bottom: 3px solid var(--gold-dark);
+  }
+
+  .about-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .about-text h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
+  .about-text p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(245,242,232,0.8);
+    margin-bottom: 16px;
+  }
+
+  .dengue-stat {
+    background: rgba(245,166,35,0.1);
+    border-left: 4px solid var(--gold);
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+  .dengue-stat strong {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .dengue-stat p { font-size: 13px; margin: 0; }
+
+  /* Pixel character illustration */
+  .pixel-char-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .pixel-screen {
+    background: #0a1a0a;
+    border: 4px solid var(--gold-dark);
+    border-bottom: 6px solid #6b4700;
+    border-right: 6px solid #6b4700;
+    padding: 24px;
+    image-rendering: pixelated;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixel-screen::before {
+    content: 'GUARDIÕES DA SAÚDE  v1.0';
+    position: absolute;
+    top: 8px; left: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: rgba(245,166,35,0.5);
+  }
+
+  .pixel-screen canvas {
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  /* FEATURES / GAMEPLAY */
+  .gameplay {
+    padding: 100px 40px;
+    background: var(--dark);
+  }
+
+  .features-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    border: 2px solid var(--gold-dark);
+  }
+
+  .feature-card {
+    background: #0e0e0c;
+    padding: 32px 24px;
+    border: 1px solid rgba(245,166,35,0.15);
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+
+  .feature-card:hover::before { transform: scaleY(1); }
+  .feature-card:hover { background: #161613; }
+
+  .feature-icon {
+    width: 40px; height: 40px;
+    background: var(--gold-dark);
+    margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center;
+    image-rendering: pixelated;
+    position: relative;
+  }
+
+  /* pixel icons via CSS */
+  .feature-icon::after {
+    content: attr(data-px);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: var(--dark);
+    line-height: 1;
+  }
+
+  .feature-card h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+    line-height: 1.8;
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    color: rgba(245,242,232,0.7);
+    line-height: 1.8;
+  }
+
+  /* CHARACTERS */
+  .characters {
+    padding: 100px 40px;
+    background: #0c0c0a;
+    border-top: 3px solid var(--gold-dark);
+  }
+
+  .chars-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .char-card {
+    background: #111110;
+    border: 2px solid rgba(245,166,35,0.2);
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .char-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+  }
+
+  .char-card.villain { border-color: rgba(192,57,43,0.3); }
+  .char-card.villain:hover { border-color: var(--red); }
+
+  .char-sprite {
+    width: 80px; height: 80px;
+    margin: 0 auto 20px;
+    image-rendering: pixelated;
+    display: block;
+  }
+
+  .char-role {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .char-card.villain .char-role { color: var(--red); }
+
+  .char-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .char-desc {
+    font-size: 13px;
+    color: rgba(245,242,232,0.7);
+    line-height: 1.7;
+  }
+
+  /* WORLD */
+  .world {
+    padding: 100px 40px;
+    background: var(--dark);
+    border-top: 3px solid var(--gold-dark);
+  }
+
+  .world-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .world-map {
+    background: #0a1a0a;
+    border: 3px solid var(--gold-dark);
+    padding: 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .world-map::before {
+    content: 'MAPA — PRATINHO D\'ÁGUA';
+    position: absolute;
+    top: 12px; left: 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: rgba(245,166,35,0.6);
+  }
+
+  .map-canvas { display: block; width: 100%; image-rendering: pixelated; }
+
+  .world-desc {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .world-fact {
+    background: #0e0e0c;
+    border: 1px solid rgba(245,166,35,0.15);
+    padding: 20px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .world-fact-icon {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .world-fact h5 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .world-fact p { font-size: 13px; color: rgba(245,242,232,0.7); line-height: 1.7; }
+
+  /* DOWNLOAD */
+  .download {
+    padding: 100px 40px;
+    background: #111110;
+    border-top: 3px solid var(--gold-dark);
+    text-align: center;
+  }
+
+  .download-box {
+    max-width: 560px;
+    margin: 0 auto;
+    background: #0e0e0c;
+    border: 3px solid var(--gold);
+    padding: 48px;
+    position: relative;
+  }
+
+  .download-box::before, .download-box::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    background: var(--dark);
+    border: 3px solid var(--gold);
+  }
+  .download-box::before { top: -3px; left: -3px; border-right: none; border-bottom: none; }
+  .download-box::after { bottom: -3px; right: -3px; border-left: none; border-top: none; }
+
+  .download-icon {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 32px;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .download-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    color: var(--white);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  .download-subtitle {
+    font-size: 14px;
+    color: rgba(245,242,232,0.6);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .download-info {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .dl-info-item {
+    font-size: 11px;
+    color: rgba(245,242,232,0.5);
+    font-family: 'Press Start 2P', monospace;
+  }
+  .dl-info-item span { color: var(--gold-dark); }
+
+  .feedback-note {
+    margin-top: 32px;
+    font-size: 12px;
+    color: rgba(245,242,232,0.4);
+    line-height: 1.7;
+  }
+  .feedback-note a { color: var(--blue-light); text-decoration: none; }
+
+  /* FOOTER */
+  footer {
+    background: #0a0a09;
+    border-top: 3px solid var(--gold-dark);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: rgba(245,242,232,0.4);
+    margin-bottom: 24px;
+  }
+
+  .footer-credits {
+    font-size: 11px;
+    color: rgba(245,242,232,0.3);
+    line-height: 2;
+  }
+
+  /* pixel divider */
+  .px-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 48px;
+    max-width: 300px;
+  }
+  .px-divider::before, .px-divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--gold-dark) 0, var(--gold-dark) 6px, transparent 6px, transparent 12px);
+  }
+  .px-divider-dot {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  /* SCANLINES effect */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 1px, transparent 1px, transparent 3px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Pixel scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .chars-grid { grid-template-columns: 1fr; }
+    .world-desc { grid-template-columns: 1fr; }
+    .btn-secondary { margin-left: 0; }
+    .download-box { padding: 32px 20px; }
+  }
+
+  /* entrance animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * { animation: fadeUp 0.6s ease both; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(6) { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚔ GUARDIÕES</div>
+  <div class="nav-links">
+    <a href="#sobre">Sobre</a>
+    <a href="#gameplay">Gameplay</a>
+    <a href="#personagens">Personagens</a>
+    <a href="#mundo">Mundo</a>
+    <a href="#download">Download</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <!-- floating pixel decorations -->
+  <div class="pixel-deco" style="top:20%;left:10%"></div>
+  <div class="pixel-deco" style="top:35%;right:12%"></div>
+  <div class="pixel-deco" style="top:55%;left:18%"></div>
+  <div class="pixel-deco" style="top:25%;right:22%"></div>
+
+  <div class="city-silhouette"></div>
+
+  <div class="hero-content">
+    <div class="shield-logo">
+      <!-- SVG shield logo inspired by the game's logo -->
+      <svg viewBox="0 0 120 120" class="shield-svg" xmlns="http://www.w3.org/2000/svg">
+        <!-- Shield body -->
+        <polygon points="60,8 104,28 104,68 60,112 16,68 16,28" fill="#F5A623" stroke="#6B4700" stroke-width="3"/>
+        <polygon points="60,16 96,32 96,66 60,104 24,66 24,32" fill="#FAC75A" stroke="none"/>
+        <!-- Inner cross -->
+        <rect x="52" y="36" width="16" height="40" fill="#1A5FA8" rx="1"/>
+        <rect x="36" y="52" width="48" height="16" fill="#1A5FA8" rx="1"/>
+        <!-- Mosquito cross-out circle -->
+        <circle cx="80" cy="40" r="14" fill="#C0392B" stroke="#6B4700" stroke-width="2"/>
+        <line x1="70" y1="30" x2="90" y2="50" stroke="white" stroke-width="3"/>
+        <!-- small mosquito silhouette -->
+        <ellipse cx="80" cy="40" rx="5" ry="3" fill="rgba(0,0,0,0.4)"/>
+        <line x1="75" y1="37" x2="72" y2="33" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+        <line x1="85" y1="37" x2="88" y2="33" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <p class="hero-tagline">▶ Jogo educativo mobile • 2025</p>
+
+    <h1>
+      <span class="hero-title">
+        GUARDIÕES
+        <span>DA SAÚDE</span>
+      </span>
+    </h1>
+
+    <p class="hero-desc">
+      Um jogo de plataforma 2D em pixel art onde você combate o mosquito <em>Aedes aegypti</em> e protege a cidade de Pratinho D'Água contra a dengue.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#download" class="btn-pixel btn-primary">▼ BAIXAR APK</a>
+      <a href="#gameplay" class="btn-pixel btn-secondary">► VER GAMEPLAY</a>
+    </div>
+
+    <div class="badge-row">
+      <div class="badge"><div class="badge-dot"></div>Android Mobile</div>
+      <div class="badge"><div class="badge-dot" style="background:var(--blue-light)"></div>Pixel Art 8-bit</div>
+      <div class="badge"><div class="badge-dot" style="background:var(--green)"></div>Educativo & Grátis</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="about" id="sobre">
+  <h2 class="section-title">SOBRE O <span>PROJETO</span></h2>
+  <div class="px-divider"><div class="px-divider-dot"></div></div>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <h3>A dengue como<br>missão do jogador</h3>
+      <p>
+        Guardiões da Saúde é um jogo digital mobile desenvolvido como ferramenta de conscientização no combate à dengue, voltado ao público que, mesmo tendo acesso a informações preventivas, não adota práticas adequadas de prevenção.
+      </p>
+      <p>
+        Ao invés de cartazes e panfletos, o jogo usa a mecânica e a narrativa para ensinar o jogador a identificar e eliminar focos do mosquito, conscientizando de forma interativa e lúdica.
+      </p>
+      <div class="dengue-stat">
+        <strong>⚠ DADO IMPORTANTE</strong>
+        <p>De Janeiro a meados de 2025, o Brasil registrou mais de 6,5 milhões de infecções por dengue. Regiões Norte e Sul estão no radar de risco crescente.</p>
+      </div>
+    </div>
+
+    <div class="pixel-char-container">
+      <div class="pixel-screen">
+        <!-- Pixel art scene rendered via canvas -->
+        <canvas id="sceneCanvas" width="260" height="160" style="margin-top:20px;"></canvas>
+      </div>
+      <p style="font-family:'Press Start 2P',monospace;font-size:7px;color:rgba(245,166,35,0.5);text-align:center;">FASE 1 — PRATINHO D'ÁGUA</p>
+    </div>
+  </div>
+</section>
+
+<!-- GAMEPLAY -->
+<section class="gameplay" id="gameplay">
+  <h2 class="section-title">COMO <span>JOGAR</span></h2>
+  <div class="px-divider"><div class="px-divider-dot"></div></div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" data-px="🏃"></div>
+      <h4>PLATAFORMA<br>SIDE-SCROLL</h4>
+      <p>Corra, pule, agache e ataque enquanto explora os bairros de Pratinho D'Água em estilo metroidvania.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" data-px="🦟"></div>
+      <h4>ELIMINE<br>OS FOCOS</h4>
+      <p>Identifique tonéis, pneus e caixas d'água com água parada — criadouros do Aedes aegypti — e destrua-os.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" data-px="🧩"></div>
+      <h4>PUZZLES<br>EDUCATIVOS</h4>
+      <p>Resolva desafios que ensinam boas práticas de saúde pública e descarte correto de materiais.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" data-px="⬆"></div>
+      <h4>EVOLUA<br>SEU HERÓI</h4>
+      <p>Colete pontos de experiência, melhore atributos e desbloqueie novos equipamentos de combate a endemias.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" data-px="💬"></div>
+      <h4>DICAS DE<br>PREVENÇÃO</h4>
+      <p>Bandeireiras informativas espalhadas pelo mapa ensinam curiosidades reais sobre a dengue e o mosquito.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" data-px="🏆"></div>
+      <h4>PONTUAÇÃO<br>COMPETITIVA</h4>
+      <p>Contador de pontos instiga o jogador a zerar com o melhor desempenho — engajamento garantido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAGENS -->
+<section class="characters" id="personagens">
+  <h2 class="section-title">OS <span>PERSONAGENS</span></h2>
+  <div class="px-divider"><div class="px-divider-dot"></div></div>
+
+  <div class="chars-grid" style="max-width:960px;margin:0 auto;">
+    <!-- Lucas -->
+    <div class="char-card">
+      <canvas id="lucasSprite" width="80" height="80" class="char-sprite"></canvas>
+      <div class="char-role">★ Herói</div>
+      <div class="char-name">LUCAS</div>
+      <p class="char-desc">Jovem estudante e morador da região. Parte em missão para ajudar Carlos e proteger sua cidade da dengue, ganhando conhecimento e liderança ao longo da jornada.</p>
+    </div>
+
+    <!-- Carlos -->
+    <div class="char-card">
+      <canvas id="carlosSprite" width="80" height="80" class="char-sprite"></canvas>
+      <div class="char-role">◆ Mentor</div>
+      <div class="char-name">CARLOS</div>
+      <p class="char-desc">Agente de Combate a Endemias (ACE), experiente e dedicado. Acamado pela doença, guia Lucas remotamente via rádio comunicador nas missões de campo.</p>
+    </div>
+
+    <!-- Mosquito -->
+    <div class="char-card villain">
+      <canvas id="mosquitoSprite" width="80" height="80" class="char-sprite"></canvas>
+      <div class="char-role" style="color:#C0392B">✖ Vilão</div>
+      <div class="char-name">AEDES<br>AEGYPTI</div>
+      <p class="char-desc">O mosquito transmissor. O macho é inimigo recorrente que guarda os focos. A fêmea é o chefão final — maior, mais forte e portadora do vírus da dengue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MUNDO -->
+<section class="world" id="mundo">
+  <h2 class="section-title">O MUNDO — <span>PRATINHO D'ÁGUA</span></h2>
+  <div class="px-divider"><div class="px-divider-dot"></div></div>
+
+  <div class="world-inner">
+    <div class="world-map">
+      <canvas id="mapCanvas" width="880" height="200" class="map-canvas"></canvas>
+    </div>
+
+    <div class="world-desc">
+      <div class="world-fact">
+        <div class="world-fact-icon" style="color:var(--gold)">🏙</div>
+        <div>
+          <h5>CIDADE TROPICAL</h5>
+          <p>Terrenos baldios, lagos, esgotos e ruas com e sem pavimentação. Clima quente com chuvas frequentes — ambiente perfeito para proliferação do mosquito.</p>
+        </div>
+      </div>
+      <div class="world-fact">
+        <div class="world-fact-icon" style="color:var(--blue-light)">🌳</div>
+        <div>
+          <h5>CENÁRIO 2D PIXEL</h5>
+          <p>Estilo 8-16 bits com parallax de múltiplas camadas. Referências visuais em Castlevania, Metroid e EarthBound com soundtrack exclusiva.</p>
+        </div>
+      </div>
+      <div class="world-fact">
+        <div class="world-fact-icon" style="color:var(--red)">⚠</div>
+        <div>
+          <h5>FOCOS DE DENGUE</h5>
+          <p>Tonéis, pneus, caixas d'água e outros objetos com água parada espalham inimigos pelo mapa. Destrua-os para limpar a área.</p>
+        </div>
+      </div>
+      <div class="world-fact">
+        <div class="world-fact-icon" style="color:var(--green)">📍</div>
+        <div>
+          <h5>MAPA INTERATIVO</h5>
+          <p>Bandeireiras de sinalização marcam pontos de interesse. NPCs e moradores habitam a cidade e oferecem informações ao jogador.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="download" id="download">
+  <h2 class="section-title">BAIXE O <span>APK</span></h2>
+  <div class="px-divider"><div class="px-divider-dot"></div></div>
+
+  <div class="download-box">
+    <span class="download-icon">📱</span>
+    <h3 class="download-title">GUARDIÕES DA SAÚDE</h3>
+    <p class="download-subtitle">
+      Versão de teste disponível gratuitamente para Android.<br>
+      Jogue e ajude a combater a dengue!
+    </p>
+
+    <a href="https://bit.ly/4kxVO7E" class="btn-pixel btn-primary" target="_blank" rel="noopener">
+      ▼ DOWNLOAD APK
+    </a>
+
+    <div class="download-info">
+      <div class="dl-info-item"><span>PLATAFORMA</span><br>Android</div>
+      <div class="dl-info-item"><span>VERSÃO</span><br>Beta 1.0</div>
+      <div class="dl-info-item"><span>PREÇO</span><br>Grátis</div>
+    </div>
+
+    <p class="feedback-note">
+      Após jogar, <a href="https://bit.ly/4kxVO7E" target="_blank">deixe seu feedback</a> e ajude a melhorar o jogo. Sua opinião é fundamental para o desenvolvimento!
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚔ GUARDIÕES DA SAÚDE</div>
+  <p class="footer-tagline">Jogue. Aprenda. Proteja sua cidade.</p>
+  <p class="footer-credits">
+    Desenvolvido como Trabalho de Conclusão de Curso • 2025<br>
+    Tecnologia em Jogos Digitais • Paragominas – PA<br>
+    <span style="color:rgba(245,166,35,0.4)">Feito com ❤ e pixel art</span>
+  </p>
+</footer>
+
+<script>
+// ── PIXEL ART CANVAS UTILITIES ──────────────────────────────────────────────
+function px(ctx, x, y, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+}
+
+// ── SCENE CANVAS (About section) ────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('sceneCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const S = 2; // pixel scale
+
+  function draw(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    // Sky
+    ctx.fillStyle = '#1a3a5c';
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    // Stars
+    const stars = [[12,8],[40,5],[70,12],[100,4],[140,9],[180,6],[220,11],[250,7]];
+    stars.forEach(([sx, sy]) => { px(ctx, sx, sy, S, S, '#fff'); });
+
+    // Ground
+    px(ctx, 0, c.height - 24, c.width, 24, '#0d2b0d');
+    px(ctx, 0, c.height - 24, c.width, 3, '#1a4d1a');
+
+    // Building 1
+    px(ctx, 10, 60, 40, 76, '#0a1a0a');
+    px(ctx, 18, 68, 8, 8, '#FAC75A'); // window lit
+    px(ctx, 34, 68, 8, 8, '#FAC75A');
+    px(ctx, 18, 84, 8, 8, '#FAC75A');
+    px(ctx, 34, 84, 8, 8, '#2a3a2a');
+
+    // Building 2
+    px(ctx, 60, 40, 30, 96, '#0d1f0d');
+    px(ctx, 66, 50, 6, 6, '#378ADD');
+    px(ctx, 78, 50, 6, 6, '#FAC75A');
+    px(ctx, 66, 64, 6, 6, '#FAC75A');
+    px(ctx, 78, 64, 6, 6, '#378ADD');
+    px(ctx, 66, 78, 6, 6, '#2a3a2a');
+    px(ctx, 78, 78, 6, 6, '#FAC75A');
+
+    // Building 3 (tall)
+    px(ctx, 100, 20, 24, 116, '#080f08');
+    for(let wy = 30; wy < 110; wy += 14) {
+      px(ctx, 106, wy, 5, 5, Math.sin(t*0.003 + wy) > 0.3 ? '#FAC75A' : '#0d1a0d');
+      px(ctx, 113, wy, 5, 5, Math.sin(t*0.003 + wy + 2) > 0 ? '#378ADD' : '#0d1a0d');
+    }
+
+    // Tree
+    px(ctx, 140, 90, 10, 46, '#3d2008'); // trunk
+    px(ctx, 128, 60, 34, 34, '#0d4a0d');
+    px(ctx, 132, 50, 26, 16, '#1a6a1a');
+    px(ctx, 140, 44, 10, 10, '#0d4a0d');
+
+    // Barrel / foco mosquito
+    const bx = 170 + Math.round(Math.sin(t * 0.001) * 0); // static
+    px(ctx, bx, c.height - 38, 18, 18, '#2a4a8a');
+    px(ctx, bx, c.height - 42, 18, 4, '#1a88cc'); // water
+    px(ctx, bx + 6, c.height - 38, 2, 18, '#1a3a6a');
+    px(ctx, bx + 12, c.height - 38, 2, 18, '#1a3a6a');
+    // exclamation
+    px(ctx, bx + 7, c.height - 52, 4, 10, '#F5A623');
+    px(ctx, bx + 7, c.height - 38, 4, 4, '#F5A623');
+
+    // Lucas character (8x16 pixel art simplified)
+    const lx = 195 + Math.round(Math.sin(t * 0.004) * 2);
+    const ly = c.height - 56;
+    // legs
+    px(ctx, lx+2, ly+12, 4, 8, '#1a2a8a'); // pants l
+    px(ctx, lx+8, ly+12, 4, 8, '#1a2a8a'); // pants r
+    px(ctx, lx+2, ly+18, 4, 4, '#8B4513'); // shoe l
+    px(ctx, lx+8, ly+18, 4, 4, '#8B4513'); // shoe r
+    // body
+    px(ctx, lx, ly+4, 14, 10, '#c0392b'); // red shirt
+    // head
+    px(ctx, lx+2, ly-4, 10, 10, '#c8a882'); // face
+    // hair
+    px(ctx, lx+2, ly-6, 10, 4, '#3d2008');
+    // arms
+    px(ctx, lx-2, ly+4, 4, 8, '#c8a882');
+    px(ctx, lx+12, ly+4, 4, 8, '#c8a882');
+    // racket
+    px(ctx, lx+14, ly, 3, 10, '#8B6914'); // handle
+    px(ctx, lx+17, ly-8, 8, 10, '#378ADD'); // head frame
+    // cross hair of racket
+    for(let ry = ly - 6; ry < ly + 2; ry += 3) {
+      px(ctx, lx+18, ry, 6, 1, '#5aabf0');
+    }
+
+    // Mosquito (enemy flying)
+    const mx = 220 + Math.round(Math.sin(t * 0.006) * 12);
+    const my = 60 + Math.round(Math.cos(t * 0.005) * 10);
+    px(ctx, mx, my+2, 10, 6, '#1a3a1a');
+    px(ctx, mx+2, my, 6, 10, '#1a3a1a');
+    // wings
+    const wingUp = Math.sin(t * 0.02) > 0;
+    px(ctx, mx - 6, wingUp ? my - 2 : my, 8, 4, 'rgba(200,230,200,0.6)');
+    px(ctx, mx + 10, wingUp ? my - 2 : my, 8, 4, 'rgba(200,230,200,0.6)');
+    // stinger
+    px(ctx, mx + 4, my + 10, 2, 6, '#444');
+
+    // HUD
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(4, 4, 90, 16);
+    ctx.fillStyle = '#F5A623';
+    ctx.font = '6px "Press Start 2P"';
+    ctx.fillText('PONTOS: 0', 8, 15);
+    // hearts
+    for(let h = 0; h < 5; h++) {
+      px(ctx, 4 + h*12, 22, 8, 8, '#c0392b');
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ── LUCAS SPRITE ─────────────────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('lucasSprite');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  let frame = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, 80, 80);
+    const S = 4;
+    const ox = 24, oy = 10;
+    const bob = Math.floor(frame / 10) % 2;
+
+    // Legs walk
+    const lOff = Math.sin(frame * 0.15) > 0 ? 2 : -2;
+    px(ctx, ox+2, oy+28+lOff, S, S*2, '#1a2a8a');
+    px(ctx, ox+8, oy+28-lOff, S, S*2, '#1a2a8a');
+    px(ctx, ox+2, oy+36+lOff, S, S, '#5d3a1a');
+    px(ctx, ox+8, oy+36-lOff, S, S, '#5d3a1a');
+    // body
+    px(ctx, ox, oy+12, S*4, S*4, '#c0392b');
+    // backpack
+    px(ctx, ox-4, oy+14, S, S*3, '#555');
+    // head
+    px(ctx, ox+2, oy, S*3, S*3, '#d4a574');
+    // hair
+    px(ctx, ox+2, oy-4, S*3, S, '#3d2008');
+    px(ctx, ox+2, oy-2, S, S, '#3d2008');
+    // eyes
+    px(ctx, ox+4, oy+4, S-1, S-1, '#1a1a18');
+    px(ctx, ox+8, oy+4, S-1, S-1, '#1a1a18');
+    // arms
+    px(ctx, ox-4, oy+12, S, S*3, '#d4a574');
+    px(ctx, ox+S*4, oy+12, S, S*3, '#d4a574');
+    // racket arm (right)
+    px(ctx, ox+S*4, oy+16, S, S*5, '#8B6914');
+    px(ctx, ox+S*4+2, oy+10, S*2, S*2, '#378ADD');
+
+    frame++;
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ── CARLOS SPRITE ────────────────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('carlosSprite');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+
+  function draw() {
+    ctx.clearRect(0, 0, 80, 80);
+    const S = 4;
+    const ox = 24, oy = 10;
+    // Legs (sitting/resting)
+    px(ctx, ox+2, oy+30, S, S*2, '#7a5c2e');
+    px(ctx, ox+8, oy+30, S, S*2, '#7a5c2e');
+    // Body - vest
+    px(ctx, ox, oy+14, S*4, S*4, '#c8a850');
+    px(ctx, ox+4, oy+14, S*2, S*4, '#a08828');
+    // Head
+    px(ctx, ox+2, oy+2, S*3, S*3, '#c8a882');
+    // Hat
+    px(ctx, ox, oy-2, S*4, S, '#6b4f1a');
+    px(ctx, ox+2, oy-6, S*3, S, '#855f22');
+    // Face hair (beard)
+    px(ctx, ox+2, oy+8, S*3, S, 'rgba(255,255,255,0.4)');
+    // Eyes
+    px(ctx, ox+4, oy+4, S-1, S-1, '#1a1a18');
+    px(ctx, ox+8, oy+4, S-1, S-1, '#1a1a18');
+    // Arms
+    px(ctx, ox-4, oy+14, S, S*3, '#c8a882');
+    px(ctx, ox+S*4, oy+14, S, S*3, '#c8a882');
+    // Walkie-talkie
+    px(ctx, ox+S*4, oy+16, S, S*3, '#333');
+    px(ctx, ox+S*4+1, oy+14, 2, 8, '#555');
+    // Mask (dengue sick)
+    px(ctx, ox+2, oy+8, S*3, S, 'rgba(200,230,220,0.6)');
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ── MOSQUITO SPRITE ──────────────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('mosquitoSprite');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  let t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, 80, 80);
+    const S = 3;
+    const ox = 28, oy = 24;
+    const wingBeat = Math.sin(t * 0.2) > 0;
+
+    // Wings
+    const wyOff = wingBeat ? -4 : 0;
+    ctx.fillStyle = 'rgba(150,200,150,0.5)';
+    ctx.fillRect(ox-14, oy+wyOff, 14, 8);
+    ctx.fillRect(ox+S*4, oy+wyOff, 14, 8);
+    // Body
+    px(ctx, ox+2, oy+4, S*3, S*5, '#2a3a2a');
+    px(ctx, ox, oy, S*4, S*2, '#1a2a1a');
+    // Head
+    px(ctx, ox+2, oy-4, S*3, S*3, '#1a2a1a');
+    // Eyes (red)
+    px(ctx, ox+4, oy-2, S-1, S-1, '#c0392b');
+    px(ctx, ox+8, oy-2, S-1, S-1, '#c0392b');
+    // Stinger
+    px(ctx, ox+4, oy+18, S, S*3, '#555');
+    px(ctx, ox+5, oy+24, 2, S, '#c0392b');
+    // Legs
+    for(let l = 0; l < 3; l++) {
+      const lx = ox + l * 4;
+      px(ctx, lx, oy+8, 2, 2, '#2a3a2a');
+      px(ctx, lx - 4, oy+10, S, 2, '#1a2a1a');
+    }
+    // Antennae
+    px(ctx, ox+4, oy-8, 2, 6, '#2a3a2a');
+    px(ctx, ox+10, oy-8, 2, 6, '#2a3a2a');
+    px(ctx, ox+2, oy-10, 2, 2, '#c0392b');
+    px(ctx, ox+12, oy-10, 2, 2, '#c0392b');
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ── MAP CANVAS ───────────────────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('mapCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+
+  function drawMap() {
+    // Sky
+    ctx.fillStyle = '#0a1628';
+    ctx.fillRect(0, 0, W, H);
+
+    // Ground strip
+    ctx.fillStyle = '#0d2b0d';
+    ctx.fillRect(0, H - 40, W, 40);
+    ctx.fillStyle = '#1a4d1a';
+    ctx.fillRect(0, H - 40, W, 3);
+
+    // Path/road
+    ctx.fillStyle = '#2a2a28';
+    ctx.fillRect(0, H - 40, W, 20);
+    // Road markings
+    ctx.fillStyle = '#FAC75A';
+    for (let rx = 0; rx < W; rx += 60) {
+      ctx.fillRect(rx, H - 31, 30, 3);
+    }
+
+    // Clouds
+    const clouds = [[60,20],[200,14],[380,22],[580,16],[740,20]];
+    clouds.forEach(([cx, cy]) => {
+      ctx.fillStyle = 'rgba(180,200,230,0.15)';
+      ctx.fillRect(cx, cy, 60, 14);
+      ctx.fillRect(cx+10, cy-8, 40, 12);
+    });
+
+    // Buildings
+    const buildings = [
+      {x:20,w:50,h:90,c:'#0a1a0a',wc:'#FAC75A'},
+      {x:90,w:35,h:70,c:'#0d1f0d',wc:'#378ADD'},
+      {x:145,w:60,h:110,c:'#080f08',wc:'#FAC75A'},
+      {x:220,w:40,h:80,c:'#0a1a0a',wc:'#1a88cc'},
+      {x:280,w:30,h:55,c:'#0d1f0d',wc:'#FAC75A'},
+      {x:330,w:55,h:100,c:'#080f08',wc:'#FAC75A'},
+      {x:410,w:40,h:75,c:'#0a1a0a',wc:'#378ADD'},
+      {x:470,w:45,h:88,c:'#0d1f0d',wc:'#FAC75A'},
+      {x:540,w:30,h:60,c:'#0a1a0a',wc:'#1a88cc'},
+      {x:590,w:65,h:105,c:'#080f08',wc:'#FAC75A'},
+      {x:680,w:40,h:78,c:'#0a1a0a',wc:'#378ADD'},
+      {x:740,w:35,h:65,c:'#0d1f0d',wc:'#FAC75A'},
+      {x:800,w:55,h:92,c:'#080f08',wc:'#FAC75A'},
+    ];
+
+    buildings.forEach(b => {
+      ctx.fillStyle = b.c;
+      ctx.fillRect(b.x, H - 40 - b.h, b.w, b.h);
+      // windows
+      for(let wy = H-40-b.h+8; wy < H-48; wy += 16) {
+        for(let wx = b.x+6; wx < b.x+b.w-8; wx += 14) {
+          ctx.fillStyle = Math.random() > 0.3 ? b.wc : '#0d0d0a';
+          ctx.fillRect(wx, wy, 6, 6);
+        }
+      }
+    });
+
+    // Trees
+    const trees = [160, 310, 500, 660, 830];
+    trees.forEach(tx => {
+      ctx.fillStyle = '#3d2008';
+      ctx.fillRect(tx, H-70, 8, 30);
+      ctx.fillStyle = '#0d4a0d';
+      ctx.fillRect(tx-16, H-100, 40, 34);
+      ctx.fillStyle = '#1a6a1a';
+      ctx.fillRect(tx-10, H-110, 28, 16);
+    });
+
+    // Barrels (dengue focus points)
+    const barrels = [{x:120,full:true},{x:430,full:false},{x:720,full:true}];
+    barrels.forEach(bar => {
+      ctx.fillStyle = bar.full ? '#2a4a8a' : '#555';
+      ctx.fillRect(bar.x, H-58, 16, 18);
+      if(bar.full) {
+        ctx.fillStyle = '#1a88cc';
+        ctx.fillRect(bar.x, H-62, 16, 4);
+        ctx.fillStyle = '#F5A623';
+        ctx.fillRect(bar.x+5, H-70, 4, 8);
+        ctx.fillRect(bar.x+5, H-58, 4, 4);
+      }
+    });
+
+    // Title overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(0, 0, W, 28);
+
+    ctx.fillStyle = 'rgba(245,166,35,0.7)';
+    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.fillText('PRATINHO D\'ÁGUA  —  MAPA FASE 1', 12, 18);
+  }
+
+  drawMap();
+})();
+
+// ── SMOOTH SCROLL ─────────────────────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({behavior: 'smooth'});
+  });
+});
+</script>
+</body>
+</html>
